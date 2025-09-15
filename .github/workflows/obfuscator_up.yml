@@ -1,6 +1,8 @@
 name: 混淆最新版本源码
 on:
     workflow_dispatch:
+    schedule:
+    - cron: "0 1 1 * *" # 每月1号1点自动运行
 
 jobs:
   obfuscate:
@@ -40,7 +42,8 @@ jobs:
           --control-flow-flattening-threshold 1 \
           --dead-code-injection true \
           --dead-code-injection-threshold 1 \
-          --identifier-names-generator hexadecimal \
+          --identifier-names-generator dictionary \
+          --identifiers-dictionary 'apple,banana,cloud,dragon,echo,fox,guitar,horizon,iceberg,jungle,kitten,lemon,mountain,nebula,ocean,puzzle,quartz,river,shadow,tiger,umbrella,violet,whale,xylophone,yogurt,zebra,arrow,blaze,canyon,dolphin,ember,flame,glacier,hawk,ivory,jewel,kernel,lagoon,meadow,nova,orbit,prism,quest,ridge,spark,thunder,vortex,wind,zephyr,alpha,beta,gamma,delta,epsilon,zeta,theta,iota,kappa,lambda,mu,nu,xi,omicron,pi,rho,sigma,tau,upsilon,phi,chi,psi,omega,bravo,charlie,foxtrot,golf,hotel,india,juliett,kilo,lima,mike,november,oscar,papa,quebec,romeo,sierra,tango,uniform,victor,whiskey,xray,yankee,zulu,circle,square,triangle,pentagon,hexagon,octagon,star,moon,sun,planet,galaxy,comet,meteor,asteroid,nebulae,cosmos,gravity,orbitron,quantum,photon,neutron,proton,electron,atom,ion,molecule,crystal,prismal,beacon,lantern,torch,flint,emberly,cinder,blizzard,storm,tornado,hurricane,typhoon,monsoon,rain,dew,mist,fog,cloudlet,stream,bubble,ripple,waves,tsunami,tide,coral,reef,atoll,island,peninsula,continent,globe,terrain,crater,volcano,geyser,fjord,cavern,grotto,stalactite,stalagmite,mineral,quartzite,granite,marble,obsidian,onyx,sapphire,emerald,ruby,diamond,opal,topaz,amber,corundum,turquoise,amethyst,jade,garnet,pearl,aqua,azure,blue,cyan,indigo,navy,teal,vivid,crimson,scarlet,rubyred,magenta,fuchsia,pink,coralred,orange,amberly,yellow,gold,emeraldgreen,olive,jadeite,forest,lime,chartreuse,violette,purple,mauve,lavender,plum,silver,bronze,brass,copper,iron,steel,titanium,chrome,mercury,platinum,aurum,argent,wood,stone,clay,sand,soil,pebble,rock,boulder,cliff,ravine,gorge,canyonland,mesa,butte,plateau,hill,knoll,ridgeway,peak,summit,zenith,nadir,horizonline,sky,ether,aurora,comettrail,starlight,moonbeam,sunray,dawn,dusk,twilight,midnight,noon,equinox,solstice,eclipse,parallax,zenithal,nadirpoint,apogee,perigee,ellipse,hyperbola,parabola,vector,scalar,matrix,tensor,fractal,chaos,entropy,energy,force,momentum,velocity,acceleration,friction,inertia,gravityfield,waveform,pulse,signal,beaconlight,transmit,receive,relay,circuit,switch,relaypoint,transistor,diode,capacitor,resistor,inductor,transformer,conductor,insulator,voltage,current,ampere,watt,ohm,joule,farad,henry,tesla,gauss,flux,magnet,field,polarity,charge,ionize,plasma,quark,lepton,boson,hadron,neutrino,antimatter,darkmatter,cosmicray,gammaflux,supernova,blackhole,whitedwarf,redgiant,pulsar,quasar,nebular,galactic,universe,multiverse,dimension,continuum,space,time,warp,fold,loop,helix,spiral,vortexstream,portal,gateway,threshold,bridge,tunnel,path,trail,track,route,journey,voyage,expedition,questline,adventure,epic,saga,chronicle,legend,myth,fable,tale,story,epilogue,prologue,chapter,verse,lyric,melody,rhythm,harmony,tempo,beat,pulsewave,tone,echoes,resonance,vibration,frequency,amplitude,wavelet,particle,quantumstate,superposition,entangle,collapse,observer,effect,paradox,anomaly,irregular,pattern,sequence,cycle,orbitpath,trajectory,arc,curve,slope,tangent,derivative,integral,limit,infinity,finite,discrete,continuous,flow,streamline,fluxline,channel,conduit,pipe,duct,vent,passage,corridor,hall,gallery,arch,beam,column,pillar,foundation,base,core,nucleus,center,focus,hub,apex,vertex,edge,border,margin,fringe,perimeter,boundary,limitless,boundless,eternal,timeless,everlast,forever,always,never,once,twice,thrice,fourth,fifth,sixth,seventh,eighth,ninth,tenth,dozen,score,century,millennium,epoch,era,age,period,phase,stage,level,tier,rank,grade,degree,order,series,chain,link,connection,joint,merge,union,fusion,synthesis,blend,mix,alloy,compound,element,atomize,molecular,structure,framework,skeleton,scaffold,grid,lattice,mesh,web,network,cluster,node,vertexpoint,edgecase,loopback,feedback,control,command,signalize,protocol,code,script,program,algorithm,logic,reason,thought,mind,intellect,wisdom,knowledge,insight,vision,clarity,focuspoint,perception,awareness,sense,intuition,gut,instinct,reflex,response,action,reaction,trigger,sparkle,ignite,kindle,blazefire,flameup,burst,explode,erupt,flare,glow,shine,radiate,illuminate,light,bright,dazzle,gleam,glint,glitter,sparkler,twinkle,starshine,moonlight,sunlight,daylight,ray,beamlight,prismray,spectrum,rainbow,halo,aura,glory,divine,celestial,ethereal,mystic,arcane,occult,secret,hidden,veil,shroud,mistify,phantom,ghost,spirit,soul,essence,vital,life,breath,air,oxygen,breeze,gale,stormwind,whirlwind,cyclone,maelstrom,eddy,swirl,twist,spin,rotate,revolve,orbitz,gyrate,whirl,pivot,turn,shift,move,drift,wander,roam,explore,seek,find,discover,uncover,reveal,expose,unveil,open,access,entry,gate,door,window,viewport,frame,canvas,scene,view,landscape,horizonview,skyscape,seascape,starscape,cosmicview' \
           --rename-globals true \
           --string-array true \
           --string-array-encoding 'rc4' \
@@ -52,7 +55,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add _worker.js _worker.js.backup
+          git add _worker.js
           if git diff --cached --quiet; then
             echo "没有文件更改，跳过提交"
           else
@@ -64,3 +67,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
+
